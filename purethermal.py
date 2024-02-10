@@ -61,7 +61,7 @@ class ThermalCamera:
                     self.mqtt_connected = self.try_mqtt_connect()
 
                 grabbed, thermal_frame = self.thermal_camera.read()
-                self.check_image_type(thermal_frame)
+                ThermalCamera.check_image_type(thermal_frame)
 
                 max_temp = np.max(self.convert_temp_f(thermal_frame))
                 min_temp = np.min(self.convert_temp_f(thermal_frame))
