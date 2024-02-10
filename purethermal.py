@@ -13,10 +13,16 @@ class ThermalCamera:
         self.mqtt_connected = self.try_mqtt_connect()
 
     def configure_camera(self):
+        print("setting up camera")
+        print("setting frame width")
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
+        print("setting frame height")
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
+        print("setting capture mode")
         self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
+        print("setting convert to RGB")
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
+        print("finished setting up camera")
 
     def try_mqtt_connect(self):
         try:
