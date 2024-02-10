@@ -49,10 +49,10 @@ class ThermalCamera:
                         print(f"Failed to publish: {e}")
                         self.mqtt_connected = False
 
-                cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
-                thermal_frame = np.uint8(thermal_frame)
-                thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
-                cv2.imshow('gray8', thermal_frame)
+                #cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
+                #thermal_frame = np.uint8(thermal_frame)
+                #thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
+                #cv2.imshow('gray8', thermal_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
         except KeyboardInterrupt:
