@@ -18,11 +18,29 @@ class ThermalCamera:
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
         print("setting frame height")
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
-        print("setting capture mode")
-        self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
+        #print("setting capture mode")
+        #self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
         print("setting convert to RGB")
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
         print("finished setting up camera")
+
+    def check_image_type(image):
+        depth = image.dtype
+        channels = image.shape[2] if len(image.shape) > 2 else 1
+        if depth == np.uint8:
+            depth_str = "8-bit"
+        elif depth == np.uint16:
+            depth_str = "16-bit"
+        else:
+            depth_str = "Unknown depth"
+        
+        if channels == 1:
+            type_str = "grayscale"
+        elif channels == 3:
+            type_str = "color"
+        else:
+            type_str = "unknown type"       
+        print(f"Image type: {depth_str} {type_str}")
 
     def try_mqtt_connect(self):
         try:
@@ -43,6 +61,7 @@ class ThermalCamera:
                     self.mqtt_connected = self.try_mqtt_connect()
 
                 grabbed, thermal_frame = self.thermal_camera.read()
+                self.check_image_type(thermal_frame)
 
                 max_temp = np.max(self.convert_temp_f(thermal_frame))
                 min_temp = np.min(self.convert_temp_f(thermal_frame))
@@ -55,9 +74,9 @@ class ThermalCamera:
                         print(f"Failed to publish: {e}")
                         self.mqtt_connected = False
 
-                #cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
-                #thermal_frame = np.uint8(thermal_frame)
-                #thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
+                cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
+                thermal_frame = np.uint8(thermal_frame)
+                thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
                 #cv2.imshow('gray8', thermal_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
