@@ -1,12 +1,18 @@
 import cv2
 import numpy as np
 import paho.mqtt.client as mqtt
-import time
+import argparse
 
-# Setup MQTT client
+parser = argparse.ArgumentParser(description='Run thermal camera script with MQTT host specification.')
+parser.add_argument('--host', type=str, default='localhost', help='MQTT host address')
+args = parser.parse_args()
+
 client = mqtt.Client()
-MQTT_HOST = "localhost"
+MQTT_HOST = args.host
 MQTT_PORT = 1883
+
+def convert_temp_f(raw_temp):
+    return (raw_temp / 100) * 9 / 5 - 459.67
 
 def try_mqtt_connect():
     try:
@@ -24,9 +30,6 @@ try:
     thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
     thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
     thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
-
-    def convert_temp_f(raw_temp):
-        return (raw_temp / 100) * 9 / 5 - 459.67
 
     while True:
 
