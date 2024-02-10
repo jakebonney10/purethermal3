@@ -5,11 +5,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Run thermal camera script with MQTT host specification.')
 parser.add_argument('--host', type=str, default='localhost', help='MQTT host address')
+parser.add_argument('--port', type=int, default=1883, help='MQTT host port')
 args = parser.parse_args()
 
 client = mqtt.Client()
 MQTT_HOST = args.host
-MQTT_PORT = 1883
+MQTT_PORT = args.port
 
 def convert_temp_f(raw_temp):
     return (raw_temp / 100) * 9 / 5 - 459.67
