@@ -24,6 +24,7 @@ class ThermalCamera:
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
         print("finished setting up camera")
 
+    @staticmethod
     def check_image_type(image):
         depth = image.dtype
         channels = image.shape[2] if len(image.shape) > 2 else 1
