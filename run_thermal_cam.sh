@@ -1,12 +1,16 @@
 #!/bin/bash
 
-# Check if an argument is provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <MQTT_HOST>"
+# Check if two arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <MQTT_HOST> <UDP_PORT>"
     exit 1
 fi
 
 MQTT_HOST=$1
+UDP_PORT=$2
 
-# Execute the Python script with the MQTT Host argument
-python3 purethermal.py --host "$MQTT_HOST"
+# Get the directory of the current script
+SCRIPT_DIR=$(dirname "$0")
+
+# Execute the Python script with the MQTT Host and UDP Port arguments
+python3 "$SCRIPT_DIR/purethermal.py" --host "$MQTT_HOST" --port "$UDP_PORT"
