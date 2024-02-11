@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import paho.mqtt.client as mqtt
 import argparse
+from flask import Flask, Response
 
 class ThermalCamera:
     def __init__(self, mqtt_host, mqtt_port):
@@ -11,6 +12,19 @@ class ThermalCamera:
         self.thermal_camera = cv2.VideoCapture(0)
         self.configure_camera()
         self.mqtt_connected = self.try_mqtt_connect()
+
+        app = Flask(__name__)
+
+    def generate_frames(self):
+        ret, buffer = cv2.imencode('.jpg', self.thermal_frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        
+    @app.route('/video')
+    def video():
+        return Response(self.generate_frames(), 
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def configure_camera(self):
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
@@ -70,3 +84,4 @@ if __name__ == '__main__':
 
     thermal_cam = ThermalCamera(args.host, args.port)
     thermal_cam.run()
+    thermal_cam.app.run(debug=True, threaded=True)
