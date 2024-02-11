@@ -11,10 +11,12 @@ class ThermalCamera:
         self.thermal_camera = cv2.VideoCapture(0)
         self.configure_camera()
         self.mqtt_connected = self.try_mqtt_connect()
+        self.frame_width = 160
+        self.frame_height = 120
 
     def configure_camera(self):
-        self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
-        self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
+        self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
+        self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
         self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
 
@@ -52,6 +54,7 @@ class ThermalCamera:
                 cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
                 thermal_frame = np.uint8(thermal_frame)
                 thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
+                thermal_frame = cv2.resize(thermal_frame, (self.frame_width*3, self.frame_height*3))  # Double the size
                 cv2.imshow('gray8', thermal_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
