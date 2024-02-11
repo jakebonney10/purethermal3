@@ -38,13 +38,13 @@ class ThermalCamera:
 
                 grabbed, thermal_frame = self.thermal_camera.read()
 
-                max_temp = np.max(self.convert_temp_f(thermal_frame))
-                min_temp = np.min(self.convert_temp_f(thermal_frame))
-                print(f"Max Temp: {max_temp:.1f}F, Min Temp: {min_temp:.1f}F")
+                max_temp = np.max(self.convert_temp_c(thermal_frame))
+                min_temp = np.min(self.convert_temp_c(thermal_frame))
+                print(f"Max Temp: {max_temp:.1f}C, Min Temp: {min_temp:.1f}C")
 
                 if self.mqtt_connected:
                     try:
-                        self.client.publish("temp_max", f"{max_temp:.1f}")
+                        self.client.publish("thermal_camera/temp_max", f"{max_temp:.1f}")
                     except Exception as e:
                         print(f"Failed to publish: {e}")
                         self.mqtt_connected = False
