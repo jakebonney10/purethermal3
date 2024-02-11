@@ -11,6 +11,7 @@ class ThermalCamera:
         self.client = mqtt.Client()
         self.mqtt_connected = self.try_mqtt_connect()
         # cam stuff
+        self.thermal_camera = cv2.VideoCapture(0)
         self.configure_camera()
 
     def configure_camera(self):
@@ -20,7 +21,7 @@ class ThermalCamera:
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
         self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
-        self.thermal_camera = cv2.VideoCapture(0)
+
 
 
     def try_mqtt_connect(self):
