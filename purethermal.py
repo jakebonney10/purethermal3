@@ -4,6 +4,8 @@ import paho.mqtt.client as mqtt
 import argparse
 from flask import Flask, Response
 
+app = Flask(__name__)
+
 class ThermalCamera:
     def __init__(self, mqtt_host, mqtt_port):
         self.mqtt_host = mqtt_host
@@ -12,8 +14,6 @@ class ThermalCamera:
         self.thermal_camera = cv2.VideoCapture(0)
         self.configure_camera()
         self.mqtt_connected = self.try_mqtt_connect()
-
-        app = Flask(__name__)
 
     def generate_frames(self):
         ret, buffer = cv2.imencode('.jpg', self.thermal_frame)
