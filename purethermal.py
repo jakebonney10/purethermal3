@@ -5,14 +5,17 @@ import argparse
 
 class ThermalCamera:
     def __init__(self, mqtt_host, mqtt_port):
+        # mqtt stuff
         self.mqtt_host = mqtt_host
         self.mqtt_port = mqtt_port
         self.client = mqtt.Client()
-        self.thermal_camera = cv2.VideoCapture(0)
-        self.configure_camera()
         self.mqtt_connected = self.try_mqtt_connect()
+        # cam stuff
+        self.thermal_camera = cv2.VideoCapture(0)
         self.frame_width = 160
         self.frame_height = 120
+        self.configure_camera()
+
 
     def configure_camera(self):
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
