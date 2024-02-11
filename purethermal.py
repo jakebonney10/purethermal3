@@ -8,9 +8,10 @@ class ThermalCamera:
         self.mqtt_host = mqtt_host
         self.mqtt_port = mqtt_port
         self.client = mqtt.Client()
+        self.mqtt_connected = self.try_mqtt_connect()
+
         self.thermal_camera = cv2.VideoCapture(0)
         self.configure_camera()
-        self.mqtt_connected = self.try_mqtt_connect()
 
     def configure_camera(self):
         print("setting up camera")
@@ -18,8 +19,8 @@ class ThermalCamera:
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
         print("setting frame height")
         self.thermal_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
-        #print("setting capture mode")
-        #self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
+        print("setting capture mode")
+        self.thermal_camera.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('Y','1','6',' '))
         print("setting convert to RGB")
         self.thermal_camera.set(cv2.CAP_PROP_CONVERT_RGB, 0)
         print("finished setting up camera")
@@ -78,7 +79,7 @@ class ThermalCamera:
                 cv2.normalize(thermal_frame, thermal_frame, 0, 255, cv2.NORM_MINMAX)
                 thermal_frame = np.uint8(thermal_frame)
                 thermal_frame = cv2.applyColorMap(thermal_frame, cv2.COLORMAP_INFERNO)
-                #cv2.imshow('gray8', thermal_frame)
+                cv2.imshow('gray8', thermal_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
         except KeyboardInterrupt:
