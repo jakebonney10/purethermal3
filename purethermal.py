@@ -27,8 +27,8 @@ class ThermalCamera:
             return False
 
     @staticmethod
-    def convert_temp_f(raw_temp):
-        return (raw_temp / 100) * 9 / 5 - 459.67
+    def convert_temp_c(raw_temp):
+        return (raw_temp / 100) - 273.15
 
     def run(self):
         try:
