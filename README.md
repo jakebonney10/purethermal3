@@ -6,7 +6,9 @@ This simple Python driver is designed for the PureThermal 3 (PT3) - FLIR Lepton 
 ## Installation
 
 1. Clone the repository:
-   `git clone https://github.com/jakebonney10/purethermal3`
+   ```
+   git clone https://github.com/jakebonney10/purethermal3
+   ```
 3. Create virtual environment (if running on RPI)
    ```
    python3 -m venv myvenv
@@ -14,7 +16,9 @@ This simple Python driver is designed for the PureThermal 3 (PT3) - FLIR Lepton 
    pip install --upgrade pip setuptools
    ```
 4. Install dependencies (within venv if running on RPI):
-   `pip install opencv-python==4.90 paho-mqtt==1.6.1`
+   ```
+   pip install opencv-python==4.90 paho-mqtt==1.6.1
+   ```
 
 ## Usage
 
@@ -39,6 +43,12 @@ For detailed usage and API documentation, refer to the [FLIR Lepton Documentatio
 - The lepton camera module makes a clicking noise when it performs its FFC (Full Frame Correction) every 3 minutes which is the default setting for the lepton. FLIR recommends not changing this to have the most accurate data. The FFC is visible in the received data as a short 5-10s 2-3 degree temperature spike. 
 - The Lepton Camera module can pop out of the board. If PT3 board blinky light is on but no video this is most likely cause.
 - FLIR has a [Windows application](https://flir.app.box.com/s/aos3khi6m2fkpxk3fsp7nfi3tdk3lra7) available for download. This works right out of the box to get images, upload firmware, check FFC settings, etc and is good for troubleshooting. Another option for linux is [GetThermal](https://github.com/groupgets/GetThermal) however it is no longer supported and buggy.
+- If getting errors associated with 16bit greyscale and gstreamer video streaming check whether you have the right version of opencv installed.
+  ```
+  python3
+  import cv2
+  print(cv2.__version__)
+  ```
 
 ## Firmware Flashing
 
